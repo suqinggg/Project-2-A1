@@ -1,0 +1,115 @@
+<html>
+    
+    <title>Su Qing Project 2</title>
+    
+    
+<head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.5/p5.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.5/addons/p5.dom.js"></script>
+	<script src="../lib/p5.speech.js"></script>
+	<script>
+    var myRec = new p5.SpeechRec();
+	var myVoice = new p5.Speech(); 
+    var menuLoaded = 0;
+	var label, input, speakbutton, vslider, rslider, pslider;
+        
+        
+        //         Codes are mostly from week 8 examples / speechbox and simplerecognition   //
+        
+    function setup()
+	{
+		createCanvas(800, 400);
+		background(235,223,239);
+		fill(0, 0, 0, 255);
+		textSize(32);
+		textAlign(CENTER);
+		text("Say something :)", width/2, height/2);
+		myRec.onResult = showResult;
+		myRec.start();
+	}
+
+	function draw()
+	{
+	}
+
+	function showResult()
+	{
+		if(myRec.resultValue==true) 	{
+            
+		// input dialog:
+		input = createInput(myRec.resultString);
+		input.style("width", 400);
+  		input.position(6000, 6000);
+            
+		// checkbox:
+		checkbox = createInput(0, 1, 0);
+		checkbox.attribute("type", "checkbox");
+		checkbox.style("width", "15px");
+		checkbox.style("height", "15px");
+  		checkbox.position(10000, 10000);
+            
+            
+		// button:
+		speakbutton = createButton('Repeat');
+  		speakbutton.position(370, 240);
+  		speakbutton.mousePressed(doSpeak);
+            
+            
+  		// sliders:
+  		vslider = createSlider(0., 100., 100.);
+  		vslider.position(90, 360);
+  		vslider.mouseReleased(setVolume);
+            
+  		rslider = createSlider(10., 200., 100.);
+  		rslider.position(330, 360);
+  		rslider.mouseReleased(setRate);
+            
+  		pslider = createSlider(1., 200., 100.);
+  		pslider.position(530, 360);
+  		pslider.mouseReleased(setPitch);
+            
+		// labels:
+
+		label = createDiv("volume");
+		label.position(230, 360);
+		label = createDiv("rate");
+		label.position(470, 360);
+		label = createDiv("pitch");
+		label.position(670, 360);
+
+		myVoice.speak(input.value());
+		background(220,232,247);
+		text(myRec.resultString, width/2, height/2);
+		console.log(myRec.resultString);			
+	   }
+	}
+	
+	function setVolume()
+	{
+		myVoice.setVolume(vslider.value()/100.);
+	}
+	function setRate()
+	{
+		myVoice.setRate(rslider.value()/100.);
+	}
+	function setPitch()
+	{
+		myVoice.setPitch(pslider.value()/100.);
+	}
+
+	function draw()
+	{
+	}
+
+	function doSpeak()
+	{
+		myVoice.interrupt = checkbox.elt.checked;
+		myVoice.speak(input.value());
+	}
+
+
+</script>
+</head>
+<body>
+</body>
+</html>
